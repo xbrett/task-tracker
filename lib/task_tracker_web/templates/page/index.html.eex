@@ -1,0 +1,9 @@
+<div class="row">
+  <div class="col-12">
+    <h1>Welcome to the future</h1>
+    <h3>Task Tracker 1.0</h3>
+    <div> 
+      <%= link "Register", to: Routes.user_path(@conn, :new), class: "btn btn-secondary"%>
+    </div>
+  </div>
+</div>
