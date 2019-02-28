@@ -3,7 +3,7 @@
     <h1>Welcome to the future</h1>
     <h3>Task Tracker 1.0</h3>
     <div> 
-      <%= link "Register", to: Routes.user_path(@conn, :new), class: "btn btn-secondary"%>
+      <%= link "Register", to: Routes.user_path(@conn, :new), class: "btn btn-lg btn-primary"%>
     </div>
   </div>
 </div>

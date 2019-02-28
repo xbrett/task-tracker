@@ -29,10 +29,9 @@
         <div class="col-4">
           <%= if @current_user do %>
             <p class="my-3">
-              User: <%= @current_user.email %> |
-              <span class="btn btn-secondary">
-              <%= link("Logout", to: Routes.session_path(@conn, :delete),
-                method: :delete) %>
+              User: <%= @current_user.email %>
+              <span>
+                <%= link "Logout", to: Routes.session_path(@conn, :delete), method: :delete, class: "btn btn-secondary" %>
               </span>
             </p>
           <% else %>

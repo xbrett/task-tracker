@@ -1,6 +1,6 @@
 <h1>Listing Users</h1>
 
-<table class="table table-primary table-striped">
+<table class="table table-primary table-striped table-hover">
   <thead>
     <tr>
       <th>ID</th>
@@ -17,14 +17,14 @@
       <td><%= user.email %></td>
       <td><%= user.admin %></td>
 
-      <td class="">
-        <%= link "Show", to: Routes.user_path(@conn, :show, user) %>
-        <%= link "Edit", to: Routes.user_path(@conn, :edit, user) %>
-        <%= link "Delete", to: Routes.user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"] %>
+      <td>
+        <span><%= link "Show", to: Routes.user_path(@conn, :show, user), class: "btn btn-primary" %> </span>
+        <span><%= link "Edit", to: Routes.user_path(@conn, :edit, user), class: "btn btn-warning" %></span>
+        <span><%= link "Delete", to: Routes.user_path(@conn, :delete, user), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger" %></span>
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
-<span><%= link "New User", to: Routes.user_path(@conn, :new) %></span>
+<span><%= link "New User", to: Routes.user_path(@conn, :new), class: "btn btn-lg btn-primary" %></span>
