@@ -10,6 +10,6 @@
   <%= error_tag f, :email %>
 
   <div>
-    <%= submit "Save", class: "btn btn-secondary" %>
+    <%= submit "Register", class: "btn btn-secondary" %>
   </div>
 <% end %>

@@ -16,5 +16,6 @@ defmodule TaskTracker.Users.User do
     user
     |> cast(attrs, [:admin, :email])
     |> validate_required([:admin, :email])
+    |> unique_constraint(:email)
   end
 end
