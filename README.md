@@ -1,7 +1,7 @@
 # TaskTracker
 
 Task tracker is an app for keeping track of all those pesky things to do. Users
-can register (or not) and assign tasks to any user in the system. Users can update
+can register, sign-in/out, and assign tasks to any user in the system. Users can update
 tasks and mark them complete as well as update the time spent up to the nearest
 15-minutes. 
 
