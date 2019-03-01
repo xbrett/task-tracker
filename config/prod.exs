@@ -10,6 +10,11 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :task_tracker, TaskTrackerWeb.Endpoint,
+  server: true,
+  root: ".",
+  version: Application.spec(:phoenix_distillery, :vsn),
+
+  load_from_system_env: true,
   http: [:inet6, port: System.get_env("PORT") || 4000],
   url: [host: "task1.foolsparadice.com", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
