@@ -24,7 +24,7 @@
   </div> 
 
   <div class="form-group">
-    <%= label f, :user_id %>
+    <%= label f, "Assign to" %>
     <%= select f, :user_id, TaskTracker.Users.list_user_for_select %>
     <%= error_tag f, :assigned_to %>
   </div>
@@ -36,6 +36,6 @@
   </div>
 
   <div>
-    <%= submit "Save", class: "btn btn-lg btn-primary" %>
+    <%= submit "Save", class: "btn btn-lg btn-primary my-3" %>
   </div>
 <% end %>
