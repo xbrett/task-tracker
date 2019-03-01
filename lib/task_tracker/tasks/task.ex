@@ -23,6 +23,9 @@ defmodule TaskTracker.Tasks.Task do
 
   def validate_time_increment(changeset, field, _options \\ []) do
     validate_change(changeset, field, fn _, time ->
+      if (time < 0) do
+        []
+      end
       case(rem(time, 15)) do
        0 -> []
        _ -> [time: "15-minute increments only"]

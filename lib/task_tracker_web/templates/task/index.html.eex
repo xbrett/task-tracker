@@ -5,9 +5,9 @@
     <tr>
       <th>Title</th>
       <th>Description</th>
-      <th>User ID</th>
+      <th>Assigned User</th>
+      <th>Time (min)</th>
       <th>Completed</th>
-      <th>Time</th>
 
       <th></th>
     </tr>
@@ -17,9 +17,9 @@
     <tr>
       <td><%= task.title %></td>
       <td><%= task.description %></td>
-      <td><%= task.user_id %></td>
-      <td><%= task.completed %></td>
+      <td><%= TaskTracker.Users.get_email(task.user_id) %></td>
       <td><%= task.time %></td>
+      <td><%= task.completed %></td>
 
       <td>
         <span><%= link "Show", to: Routes.task_path(@conn, :show, task), class: "btn btn-primary" %></span>
