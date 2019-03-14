@@ -3,8 +3,6 @@
 <table class="table table-primary table-striped table-hover">
   <thead>
     <tr>
-      <th>ID</th>
-      
       <th>Email</th>
       <th>Admin</th>
       <th></th>
@@ -13,7 +11,6 @@
   <tbody>
 <%= for user <- @users do %>
     <tr>
-      <td><%= user.id %></td>
       <td><%= user.email %></td>
       <td><%= user.admin %></td>
 
