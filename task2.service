@@ -6,7 +6,7 @@ Type=simple
 User=task1
 Group=task_tracker
 Restart=on-failure
-Environment=MIX_ENV=prod "PORT=4794"
+Environment=MIX_ENV=prod "PORT=4795"
 Environment=LANG=en_US.UTF-8
 
 WorkingDirectory=/home/task1/task-tracker
