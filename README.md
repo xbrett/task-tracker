@@ -1,19 +1,25 @@
 # TaskTracker
 
 Task tracker is an app for keeping track of all those pesky things to do. Users
-can register, sign-in/out, and assign tasks to any user in the system. Users can update
-tasks and mark them complete as well as update the time spent up to the nearest
-15-minutes. 
+can register, sign-in/out, and assign tasks to any of their underlings. Users can update
+tasks, mark them complete, as well as update the time spent by adding a specific time block
+or using the start/stop button when working on the task at hand.
 
 # Design Choices
 
-This app is supported by two database tables, users and tasks which share a one
-to many relationship respectively by use of a foreign key. When tasks are created they 
-have to be assigned to an existing user. This is enforced by the UI by way of a drop 
-down. If a user is deleted from the system, all tasks assigned to them are deleted as well 
-to ensure all data remains consistent. Time must be entered in increments of 15. This is
-enforced by the UI with a integer selector that has a step set to 15 units. All of the 
-styling in this app was done using bootstrap 4. This app has a blue theme throughout.
+This app is supported by four database tables, users, tasks, managements, and timeblocks.
+Users have a one-to-many relationship with tasks. Timeblocks have a one to many relationship
+with tasks, as tasks can stopped and started at different times. Managements are a relationship 
+between managers and underlings. A manager can have many underlings, underlings can have many
+managers, and these can be layered. For the purpose of assigning tasks, a user is considered 
+to be their own manager, so they can create tasks for themselves (this relationship is implicit
+and not seen in the Management tab of the application). This seemed like the most 
+practical decision in terms of usability for every user. Users can select who to assign a 
+task to from a drop down list of themselves and their underlings. The manager-underling
+relationship can be constructed in the Management tab, where a user is able to add an
+underling from a dropdown list of other users. They are also able to delete any of these
+relationships that they created. In this version, a user cannot see any information on 
+the site unless they are registered and logged in.
 
 
 # Running locally
