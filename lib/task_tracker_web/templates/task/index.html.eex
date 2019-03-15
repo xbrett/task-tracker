@@ -1,34 +1,43 @@
-<h1>Listing Tasks</h1>
-
+<h1>All Tasks</h1>
 <table class="table table-primary table-striped table-hover">
   <thead>
     <tr>
       <th>Title</th>
-      <th>Description</th>
-      <th>Assigned User</th>
-      <th>Time (min)</th>
+      <th>Assignee</th>
+      <th>Creator</th>
       <th>Completed</th>
-
       <th></th>
     </tr>
   </thead>
   <tbody>
-<%= for task <- @tasks do %>
-    <tr>
-      <td><%= task.title %></td>
-      <td><%= task.description %></td>
-      <td><%= TaskTracker.Users.get_email(task.user_id) %></td>
-      <td><%= task.time %></td>
-      <td><%= task.completed %></td>
-
-      <td>
-        <span><%= link "Show", to: Routes.task_path(@conn, :show, task), class: "btn btn-primary" %></span>
-        <span><%= link "Edit", to: Routes.task_path(@conn, :edit, task), class: "btn btn-warning" %></span>
-        <span><%= link "Delete", to: Routes.task_path(@conn, :delete, task), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger"%></span>
-      </td>
-    </tr>
-<% end %>
+    
+    <%= for task <- @tasks do %>
+      <tr>
+      <td> <%= task.title %> </td>
+        <%= for user <- @users do %>
+          <%= if user.id == task.assignee_id do %>
+            <td><%= user.email %></td>
+          <% end %>
+        <% end %>
+        <%= for user <- @users do %>
+          <%= if user.id == task.creator_id do %>
+            <td><%= user.email %></td>
+          <% end %>
+        <% end %>
+        <td><%= task.completed %></td>
+        <td>
+          <%= link "Show", to: Routes.task_path(@conn, :show, task), class: "btn btn-primary" %>
+          <%= if @current_user.id == task.assignee_id || @current_user.id == task.creator_id do %>
+            <%= link "Edit", to: Routes.task_path(@conn, :edit, task), class: "btn btn-warning" %>
+          <% end %>
+          <%= if @current_user.id == task.creator_id do %>
+            <%= link "Delete", to: Routes.task_path(@conn, :delete, task), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger" %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
   </tbody>
 </table>
+<p><%= link "New Task", to: Routes.task_path(@conn, :new), class: "btn btn-primary btn-lg" %><p>
 
-<span><%= link "New Task", to: Routes.task_path(@conn, :new), class: "btn btn-lg btn-primary" %></span>
+

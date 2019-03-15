@@ -19,7 +19,24 @@ defmodule TaskTracker.Tasks do
   """
   def list_tasks do
     Repo.all(Task)
+    |> Repo.preload(:timeblock)
   end
+
+  # List tasks assigned to the user
+  def list_assigned_tasks(conn) do
+    user_id = Plug.Conn.get_session(conn, :user_id)
+    query = from t in Task, where: t.assignee_id ==^ user_id, select: t
+    Repo.all(query)
+    |> Repo.preload(:timeblock)
+  end
+
+  # List tasks assigned to the user's underling
+  def list_underling_tasks(conn, underling_id) do
+    user_id = Plug.Conn.get_session(conn, :user_id)
+    query = from t in Task, where: t.assignee_id == ^underling_id and t.creator_id == ^user_id, select: t
+    %{underling_id: underling_id, tasks: Repo.all(query) |> Repo.preload(:timeblock)}
+  end
+
 
   @doc """
   Gets a single task.
@@ -35,7 +52,12 @@ defmodule TaskTracker.Tasks do
       ** (Ecto.NoResultsError)
 
   """
-  def get_task!(id), do: Repo.get!(Task, id)
+  def get_task!(id) do
+    Repo.one! from t in Task,
+      where: t.id == ^id,
+      preload: [:timeblock]
+  end
+
 
   @doc """
   Creates a task.

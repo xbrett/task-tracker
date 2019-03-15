@@ -1,10 +1,23 @@
-<h1>Show Task</h1>
+<h1><%= @task.title %></h1>
 
-<ul class="list-group">
+<ul>
 
   <li class="list-group-item list-group-item-primary">
-    <strong>Title:</strong>
-    <%= @task.title %>
+    <strong>Creator:</strong>
+      <%= for user <- @users do %>
+        <%= if user.id == @task.creator_id do %>
+          <%= user.email %>
+        <% end %>
+      <% end %>
+  </li>
+
+  <li class="list-group-item list-group-item-primary">
+    <strong>Assignee:</strong>
+      <%= for user <- @users do %>
+        <%= if user.id == @task.assignee_id do %>
+          <%= user.email %>
+        <% end %>
+      <% end %>
   </li>
 
   <li class="list-group-item list-group-item-primary">
@@ -18,11 +31,20 @@
   </li>
 
   <li class="list-group-item list-group-item-primary">
-    <strong>Time:</strong>
-    <%= @task.time %>
+    <strong>Start Time:</strong>
+      <%= for timeblock <- @task.timeblock do %>
+        <%= timeblock.start_time %>   
+      <% end %>
+      <br><strong>End Time:</strong>
+      <%= for timeblock <- @task.timeblock do %>
+        <%= timeblock.start_time %> 
+      <% end %>
   </li>
 
 </ul>
 
-<span><%= link "Edit", to: Routes.task_path(@conn, :edit, @task), class: "btn btn-warning" %></span>
-<span><%= link "Back", to: Routes.task_path(@conn, :index), class: "btn btn-danger" %></span>
+<%= if @current_user.id == @assigned_to || @current_user.id == @created_by do %> 
+  <span><%= link "Edit", to: Routes.task_path(@conn, :edit, @task), class: "btn btn-warning" %></span>  
+<% end %>
+
+<span><%= link "Back", to: "/home", class: "btn btn-danger" %></span>

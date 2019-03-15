@@ -1,0 +1,107 @@
+<p></p>
+<p><h3>Your Manager <%= @manager_id %></h3> </p>
+<%= for m <- @manager_id do %>
+    <%= for user <- @users do %>
+        <%= if user.id == m do %>
+            <ul style="list-style-type:disc">
+            <li><%= user.email %></li>
+            </ul>
+        <% end %>
+    <% end %>
+<% end %>
+<br>
+<p><h3>Your Tasks</h3></p>
+<p><table class="table table-primary table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Creator</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Completed</th>
+            <th>Time Started</th>
+            <th>Time Ended</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <%= for task <- @user_tasks do %>
+        <tr>
+            <%= for user <- @users do %>
+                <%= if user.id == task.creator_id do %>
+                    <td><%= user.email %></td>
+                <% end %>
+            <% end %>
+            <td><%= link(task.title,to: Routes.task_path(@conn, :show, task) )%></td>
+            <td><%= task.description %></td>
+            <td><%= task.completed %></td>
+            <td><%= for timeblock <- task.timeblock do %>
+                    <%= timeblock.start_time %>   
+                <% end %>
+            </td>
+            <td><%= for timeblock <- task.timeblock do %>
+                    <%= timeblock.end_time %>   
+                <% end %>
+            </td>
+            <td>
+                <%= link "Edit", to: Routes.task_path(@conn, :edit, task), class: "btn btn-warning" %>  
+                <%= if @current_user.id == task.creator_id do %>
+                    <%= link "Delete", to: Routes.task_path(@conn, :delete, task), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger" %>
+                <% end %>
+            </td>
+        </tr>
+        <% end %>
+    </tbody>
+</table></p>
+<p><%= link "New Task", to: Routes.task_path(@conn, :new), class: "btn btn-primary btn-lg" %> </p>
+<p><h3>Your Underling's Tasks</h3></p>
+<%= for underling <- @underlings do %>
+    <%= for user <- @users do %>
+        <%= if user.id ==  underling.underling_id do %>
+            <h5><%= user.email %>'s Tasks</h5>
+        <% end %>
+    <% end %>
+    <table class="table table-primary table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Creator</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Completed</th>
+            <th>Time Started</th>
+            <th>Time Ended</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    <%= for underling_task <- underling.tasks do %>
+        <tr>
+            <%= for user <- @users do %>
+                <%= if user.id == underling_task.creator_id do %>
+                    <td><%= user.email %></td>
+                <% end %>
+            <% end %>
+            <td><%= link(underling_task.title,to: Routes.task_path(@conn, :show, underling_task) )%></td>
+            <td><%= underling_task.description %></td>
+            <td><%= underling_task.completed %></td>
+            <td><%= underling_task.time %></td>
+            <td><%= for timeblock <- underling_task.timeblock do %>
+                    <%= timeblock.start_time %>   
+                <% end %>
+            </td>
+            <td><%= for timeblock <- underling_task.timeblock do %>
+                    <%= timeblock.end_time %>   
+                <% end %>
+            </td>
+            <td>
+                <%= link "Edit", to: Routes.task_path(@conn, :edit, underling_task), class: "btn btn-warning" %>
+                <%= link "Delete", to: Routes.task_path(@conn, :delete, underling_task), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger" %>
+            </td>
+        </tr>    
+    <% end %>
+    </tbody>
+    </table>
+
+<% end %>
+<p><%= link "New Underling", to: Routes.management_path(@conn, :new), class: "btn btn-primary btn-lg" %></p>
+

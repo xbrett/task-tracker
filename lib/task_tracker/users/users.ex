@@ -7,6 +7,7 @@ defmodule TaskTracker.Users do
   alias TaskTracker.Repo
 
   alias TaskTracker.Users.User
+  alias TaskTracker.Managements.Management
 
   @doc """
   Returns the list of users.
@@ -21,24 +22,29 @@ defmodule TaskTracker.Users do
     Repo.all(User)
   end
 
-  def list_user_ids do
-    query = from(u in User, select: u.id)
+  #For Management Form: list users to assign as underlings, not self or manager
+  def list_assignable_underlings(conn, manager_id) do
+    user_id = Plug.Conn.get_session(conn, :user_id)
+    query = from u in User, where: u.id != ^user_id, select: {u.email, u.id}
     Repo.all(query)
   end
 
-  def list_emails do
-    query = from(u in User, select: u.email)
-    Repo.all(query)
+  # For Task Form: List assignable users, underlings and the user
+  def list_assignable_users(conn) do
+    user_id = Plug.Conn.get_session(conn, :user_id)
+    query = from m in Management, where: m.manager_id == ^user_id, select: m.underling_id
+    ids = Repo.all(query)
+      |> Enum.concat([user_id])
+    query2 = from u in User, where: u.id in ^ids, select: {u.email, u.id}
+    Repo.all(query2)
   end
 
-  def list_user_for_select do
-    query = from(u in User, select: {u.email, u.id})
-    Repo.all(query)
+  # List the assignable users email
+  def list_assignable_user_email(conn, assignable_id) do
+    query = from u in User, where: u.id == ^assignable_id, select: u
+    %{assignable_id: assignable_id, users: Repo.all(query)}
   end
 
-  def get_email(id) do
-    get_user(id).email
-  end
 
   @doc """
   Gets a single user.
@@ -56,13 +62,16 @@ defmodule TaskTracker.Users do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
-  # below get_user!
   def get_user(id), do: Repo.get(User, id)
 
   def get_user_by_email(email) do
     Repo.get_by(User, email: email)
   end
 
+  def get_manager_email(manager_id) do
+    query = from u in User, where: u.id == ^manager_id, select: u.email
+    Repo.all(query)
+  end
   @doc """
   Creates a user.
 

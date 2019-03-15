@@ -1,0 +1,35 @@
+<h1>Listing Management</h1>
+<table class="table table-primary table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Manager</th>
+      <th>Underling</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for management <- @managements do %>
+    <tr>
+      <%= for user <- @users do %>
+        <%= if user.id == management.manager_id do %>
+          <td><%= user.email %></td>
+        <% end %>
+      <% end %>
+      <%= for user <- @users do %>
+        <%= if user.id == management.underling_id do %>
+          <td><%= user.email %></td>
+        <% end %>
+      <% end %>
+      <td>
+      <%= if @current_user.id == management.manager_id do %>
+        <%= link "Delete", to: Routes.management_path(@conn, :delete, management), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger" %>
+      <% end %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+<p><%= link "New Underling", to: Routes.management_path(@conn, :new), class: "btn btn-primary btn-lg" %></p>
+
+

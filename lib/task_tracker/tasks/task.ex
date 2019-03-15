@@ -8,7 +8,10 @@ defmodule TaskTracker.Tasks.Task do
     field :description, :string
     field :time, :integer
     field :title, :string
-    belongs_to :user, TaskTracker.Users.User
+    belongs_to :creator, TaskTracker.Users.User
+    belongs_to :assignee, TaskTracker.Users.User
+
+    has_many :timeblock, TaskTracker.Timeblocks.Timeblock
 
     timestamps()
   end
@@ -16,21 +19,7 @@ defmodule TaskTracker.Tasks.Task do
   @doc false
   def changeset(task, attrs) do
     task
-    |> cast(attrs, [:title, :description, :completed, :time, :user_id])
-    |> validate_required([:title, :description, :completed, :time, :user_id])
-    |> validate_time_increment(:time)
-  end
-
-  def validate_time_increment(changeset, field, _options \\ []) do
-    validate_change(changeset, field, fn _, time ->
-      case(rem(time, 15)) do
-       0 -> if (time < 0) do
-              [time: "Time must be positive"]
-            else
-              []
-            end
-       _ -> [time: "15-minute increments only"]
-      end
-    end)
+    |> cast(attrs, [:title, :description, :time, :completed, :creator_id, :assignee_id])
+    |> validate_required([:title, :description, :completed, :creator_id, :assignee_id])
   end
 end

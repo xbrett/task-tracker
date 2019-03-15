@@ -5,37 +5,88 @@
     </div>
   <% end %>
 
-  <div class="form-group">
-    <%= label f, :title %>
-    <%= text_input f, :title, class: "form-control" %>
-    <%= error_tag f, :title %>
+  <div class="form-group" style="display: none">
+    <%= label f, :creator_id, class: "control-label" %>
+    <%= text_input f, :creator_id, class: "form-control", value: @current_user.id %>
+    <%= error_tag f, :creator_id %>
   </div>
 
   <div class="form-group">
-    <%= label f, :description %>
-    <%= text_input f, :description, class: "form-control" %>
-    <%= error_tag f, :description %>
+    <%= label f, :assignee_id, class: "control-label" %>
+    <%= select f, :assignee_id, @assignables, class: "form-control", value: @current_user.id %> 
+    <%= error_tag f, :assignee_id %>
   </div>
 
   <div class="form-group">
-    <%= label f, "time (min)" %>
-    <%= number_input f, :time, class: "form-control", step: 15 %>
-    <%= error_tag f, :time %>
-  </div> 
-
-  <div class="form-group">
-    <%= label f, "Assign to" %>
-    <%= select f, :user_id, TaskTracker.Users.list_user_for_select %>
-    <%= error_tag f, :assigned_to %>
+  <%= label f, :title, class: "control-label" %>
+  <%= text_input f, :title, class: "form-control" %>
+  <%= error_tag f, :title %>
   </div>
 
   <div class="form-group">
-    <%= label f, :completed %>
-    <%= checkbox f, :completed %>
-    <%= error_tag f, :assigned_to %>
+  <%= label f, :description, class: "control-label" %>
+  <%= text_input f, :description, class: "form-control" %>
+  <%= error_tag f, :description %>
   </div>
 
-  <div>
-    <%= submit "Save", class: "btn btn-lg btn-primary my-3" %>
+  <%= if @current_user.id == @assigned_to do %>
+    <p>Time Spent</p>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for timeblock <- @task.timeblock do %>
+          <tr>
+            <td><%= timeblock.start_time %></td>
+            <td><%= timeblock.end_time %></td>
+            <td><button type="button"
+              class="btn btn-danger"
+              data-timeblock-id="<%= timeblock.id %>"
+              onClick="window.deleteTimeBlock(this); return false;">Delete</button>
+            <td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <div>
+      <p><span>Start time: <input id="addnew-timeblock" type="datetime-local"></span></p>
+      <p><span>End time: <input id="endnew-timeblock" type="datetime-local"></span></p>
+    </div>
+    
+    <button type="button"
+      class="btn btn-secondary"
+      id="new-timeblock-button"
+      data-task-id="<%= @task.id %>"
+      onClick="window.addTimeBlock(this); return false;">Add Timeblock
+    </button>
+    
+    <button type="button"
+      class="btn btn-success" 
+      id="start-timeblock-button">Start Tracking Time
+      </button>
+
+    <button type="button"
+      class="btn btn-danger" 
+      id="stop-timeblock-button"
+      data-task-id="<%= @task.id %>">Stop Tracking Time
+    </button>
+
+    <div class="form-group">
+      <%= label f, :completed, class: "control-label" %>
+      <%= checkbox f, :completed, class: "form-control" %>
+      <%= error_tag f, :completed %>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= submit "Save", class: "btn btn-primary"  %>
   </div>
 <% end %>
